@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="LOG_DIR" source="app.logging.file.dir" defaultValue="./logs"/>
+    <springProperty scope="context" name="LOG_MAX_SIZE" source="app.logging.file.max-size" defaultValue="2MB"/>
+    <springProperty scope="context" name="APP_LOG_LEVEL" source="logging.level.com.YaakoviCorp.Fit1337" defaultValue="INFO"/>
+
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- Default appender: stdout -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Active when 'file-log' profile is enabled: log (current), log1...log5 (1...5 archives) -->
+    <springProfile name="file-log">
+        <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_DIR}/log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_DIR}/log%i</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>5</maxIndex>
+            </rollingPolicy>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>${LOG_MAX_SIZE}</maxFileSize>
+            </triggeringPolicy>
+            <encoder>
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="ROLLING_FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- Default when 'file-log' profile is not active: stdout only -->
+    <springProfile name="!file-log">
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <logger name="com.YaakoviCorp.Fit1337" level="${APP_LOG_LEVEL}"/>
+</configuration>

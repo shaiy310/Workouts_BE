@@ -1,0 +1,48 @@
+app:
+  logging:
+    file:
+      dir: ${LOG_DIR:./logs}
+      max-size: ${LOG_MAX_SIZE:2MB}
+
+logging:
+  level:
+    com.YaakoviCorp.Fit1337: ${APP_LOG_LEVEL:INFO}
+    org.springframework.security: WARN
+
+spring:
+  application:
+    name: Fit1337
+
+  datasource:
+    url: ${NEON_JDBC_URL}
+    username: ${NEON_DB_USER}
+    password: ${NEON_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: Fit1337NeonPool
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 60000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      validation-timeout: 5000
+      keepalive-time: 30000
+
+    sql:
+      init:
+        mode: never
+        schema-locations: classpath:schema.sql
+        data-locations: classpath:data.sql
+    jpa:
+      hibernate:
+        ddl-auto: none
+
+redis:
+  host: localhost
+  port: 6379
+  ttl: 72000
+
+jwt:
+#  base64.b64encode(b'this is a very long secret')
+  secret: UkVQTEFDRV9XSVRIX1lPVVJfMzJfQllURV9CQVNFNjRfRU5DT0RFRF9TRUNSRVRfS0VZ
+  expiration-ms: 36000000
