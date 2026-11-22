@@ -5,6 +5,28 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### Environment & Secrets ###
+.env
+.env.*
+!.env.example
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+
+### Logs & Local DB ###
+logs/
+log
+log[1-9]
+*.log
+*.mv.db
+*.trace.db
+
+### OS ###
+.DS_Store
+Thumbs.db
+
 ### STS ###
 .apt_generated
 .classpath
