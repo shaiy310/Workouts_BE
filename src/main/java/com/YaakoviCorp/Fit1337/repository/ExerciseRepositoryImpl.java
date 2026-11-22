@@ -7,8 +7,8 @@ import com.YaakoviCorp.Fit1337.repository.redis.CacheRepository;
 import com.YaakoviCorp.Fit1337.repository.mapper.ExerciseMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ExerciseRepositoryImpl  implements ExerciseRepository {
     static final String EXERCISE_TABLE_NAME = "exercises";
 
-    private final Logger logger = LogManager.getLogger(ExerciseRepositoryImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ExerciseRepositoryImpl.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -34,11 +34,11 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
 
     @Override
     public Exercise createExercise(Exercise exercise) throws JsonProcessingException {
-        String sql = String.format("INSERT INTO %s (name, muscleGroup, equipment, weight, imagePath) VALUES (?, ?, ?, ?)", EXERCISE_TABLE_NAME);
+        String sql = String.format("INSERT INTO %s (name, muscle_group, equipment, weight, imagePath) VALUES (?, ?, ?, ?, ?)", EXERCISE_TABLE_NAME);
         jdbcTemplate.update(sql,
                 exercise.getName(),
-                exercise.getMuscleGroup(),
-                exercise.getEquipment(),
+                exercise.getMuscleGroup().name(),
+                exercise.getEquipment().name(),
                 exercise.getWeight(),
                 exercise.getImagePath()
         );
@@ -48,9 +48,10 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
 
     @Override
     public Exercise updateExercise(Exercise exercise) throws JsonProcessingException {
-        String sql = String.format("UPDATE %s SET equipment=?, weight=?, imagePath=?) WHERE name=?", EXERCISE_TABLE_NAME);
+        String sql = String.format("UPDATE %s SET (muscle_group=?, equipment=?, weight=?, imagePath=?) WHERE name=?", EXERCISE_TABLE_NAME);
         jdbcTemplate.update(sql,
-                exercise.getEquipment(),
+                exercise.getMuscleGroup().name(),
+                exercise.getEquipment().name(),
                 exercise.getWeight(),
                 exercise.getImagePath(),
                 exercise.getName()
@@ -103,28 +104,18 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
     @Override
     public List<Exercise> getExercisesByMuscleGroup(MuscleGroup muscleGroup) {
         String sql = String.format("SELECT * FROM %s WHERE muscle_group=?", EXERCISE_TABLE_NAME);
-        try {
-            return jdbcTemplate.query(sql, new ExerciseMapper(), muscleGroup.name());
-
-        } catch (EmptyResultDataAccessException e) {
-            logger.error("No exercises with muscle group {} found",  muscleGroup);
-            return null;
-        }
+        return jdbcTemplate.query(sql, new ExerciseMapper(), muscleGroup.name());
     }
 
     private Exercise getExerciseFromDB(String name) throws JsonProcessingException {
         String sql = String.format("SELECT * FROM %s WHERE name=?", EXERCISE_TABLE_NAME);
-        try {
-            Exercise exercise = jdbcTemplate.queryForObject(sql, new ExerciseMapper(), name);
-            String exerciseString = objectMapper.writeValueAsString(exercise);
-            assert exercise != null;
-            cacheRepository.createCacheEntity(exercise.getName(), exerciseString);
+        Exercise exercise = jdbcTemplate.queryForObject(sql, new ExerciseMapper(), name);
+        String exerciseString = objectMapper.writeValueAsString(exercise);
+        assert exercise != null;
+        cacheRepository.createCacheEntity(exercise.getName(), exerciseString);
 
-            return exercise;
-
-        } catch (EmptyResultDataAccessException e) {
-            logger.error("No exercise with name {} found", name);
-            return null;
-        }
+        return exercise;
     }
+
+
 }

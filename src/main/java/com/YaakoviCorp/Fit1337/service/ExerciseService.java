@@ -5,7 +5,6 @@ import com.YaakoviCorp.Fit1337.model.Exercise;
 import com.YaakoviCorp.Fit1337.model.MuscleGroup;
 import com.YaakoviCorp.Fit1337.repository.ExerciseRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.List;
 @Service
 public class ExerciseService{
 
-    @Autowired
-    private ExerciseRepository repo;
+    private final ExerciseRepository repo;
+
+    ExerciseService(ExerciseRepository repo) {
+        this.repo = repo;
+    }
 
     public Exercise createExercise(Exercise exercise) throws JsonProcessingException {
         return repo.createExercise(exercise);

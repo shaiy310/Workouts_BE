@@ -14,6 +14,12 @@ public class UpdateFitUserProfileRequest {
     @Size(max = 50, message = "email must be at most 50 characters")
     private String email;
 
+    public UpdateFitUserProfileRequest() {
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+    }
+
     public UpdateFitUserProfileRequest(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

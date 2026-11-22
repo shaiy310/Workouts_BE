@@ -64,8 +64,8 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
                         .addValue("id", workoutId)
                         .addValue("name", workout.name().trim())
                         .addValue("duration", workout.duration())
-                        .addValue("description", workout.description().trim())
-                        .addValue("notes", workout.notes().trim())
+                        .addValue("description", trimOrNull(workout.description()))
+                        .addValue("notes", trimOrNull(workout.notes()))
                         .addValue("ownerId", workout.ownerId())
         );
 
@@ -97,8 +97,8 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
                         .addValue("ownerId", workout.ownerId())
                         .addValue("name", workout.name().trim())
                         .addValue("duration", workout.duration())
-                        .addValue("description", workout.description().trim())
-                        .addValue("notes", workout.notes().trim())
+                        .addValue("description", trimOrNull(workout.description()))
+                        .addValue("notes", trimOrNull(workout.notes()))
         );
         if (updatedRows == 0) {
             return Optional.empty();
@@ -326,5 +326,9 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
         WorkoutSet build() {
             return new WorkoutSet(setNumber, rest, exercises);
         }
+    }
+
+    private static String trimOrNull(String value) {
+        return value == null ? null : value.trim();
     }
 }

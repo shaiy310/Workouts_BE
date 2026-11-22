@@ -16,7 +16,7 @@ public class ExerciseMapper implements RowMapper<Exercise> {
                 rs.getString("name"),
                 MuscleGroup.valueOf(rs.getString("muscle_group")),
                 Equipment.valueOf(rs.getString("equipment")),
-                rs.getFloat("weight"),
+                rs.getDouble("weight"),
                 rs.getString("imagePath")
         );
     }

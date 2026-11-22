@@ -64,7 +64,7 @@ public class ActivityEventService {
                 null,
                 eventDate,
                 incoming.workoutName().trim(),
-                incoming.workoutDescription().trim()
+                incoming.workoutDescription() != null ? incoming.workoutDescription().trim() : null
         );
         return repo.saveWorkoutEvent(userId, toSave);
     }

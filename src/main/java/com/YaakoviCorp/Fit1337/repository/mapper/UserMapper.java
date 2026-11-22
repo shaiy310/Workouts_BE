@@ -18,8 +18,8 @@ public class UserMapper implements RowMapper<FitUser> {
                 rs.getInt("active"),
                 rs.getString("roles"),
                 rs.getString("permissions"),
-                rs.getString("firstName"),
-                rs.getString("lastName"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
                 rs.getString("email")
         );
     }

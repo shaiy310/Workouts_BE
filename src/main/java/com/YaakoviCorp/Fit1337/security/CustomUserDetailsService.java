@@ -35,6 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 fitUser.getId(),
                 fitUser.getUsername(),
                 fitUser.getPassword(),
+                fitUser.getActive() == 1,
                 authorities
         );
     }

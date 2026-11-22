@@ -1,4 +1,4 @@
-package com.YaakoviCorp.Fit1337.security.model;
+package com.YaakoviCorp.Fit1337.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

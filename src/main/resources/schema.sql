@@ -7,14 +7,14 @@ DROP TABLE IF EXISTS workout_sets;
 DROP TABLE IF EXISTS workout_set_exercises;
 
 CREATE TABLE users (
-    id INT PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     username VARCHAR(100) NOT NULL default '',
     password VARCHAR(255) NOT NULL default '',
     active INT NOT NULL DEFAULT 1,
     roles VARCHAR(50) NOT NULL DEFAULT '',
     permissions VARCHAR NOT NULL DEFAULT '',
-    firstName VARCHAR(50) default '',
-    lastName VARCHAR(50) default '',
+    first_name VARCHAR(50) default '',
+    last_name VARCHAR(50) default '',
     email VARCHAR(50) default ''
 );
 

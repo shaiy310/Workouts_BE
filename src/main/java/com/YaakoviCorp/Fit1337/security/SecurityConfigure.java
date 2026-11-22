@@ -1,4 +1,4 @@
-package com.YaakoviCorp.Fit1337.security.model;
+package com.YaakoviCorp.Fit1337.security;
 
 import com.YaakoviCorp.Fit1337.security.CustomUserDetailsService;
 import com.YaakoviCorp.Fit1337.security.filter.JwtRequestFilter;
@@ -39,13 +39,11 @@ public class SecurityConfigure {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/public/exercises/**").permitAll()
                                 .requestMatchers("/api/public/user/create").permitAll()
                                 .requestMatchers("/api/public/authenticate").permitAll()
                                 .requestMatchers("/api/public/user/profile").authenticated()
                                 .requestMatchers("/api/workouts/**").authenticated()
-//                        .requestMatchers("/api/workouts/**").hasAnyRole("ROLE_ADMIN", "ROLE_USER")
                                 .anyRequest().authenticated()
                 ).sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

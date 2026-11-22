@@ -10,6 +10,7 @@ public record AuthenticatedUser(
         UUID id,
         String username,
         String password,
+        boolean enabled,
         Collection<? extends GrantedAuthority> authorities
 ) implements UserDetails {
 
@@ -27,4 +28,6 @@ public record AuthenticatedUser(
     public String getUsername() {
         return username;
     }
+
+    public boolean isEnabled() {return enabled; }
 }

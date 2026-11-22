@@ -1,7 +1,6 @@
 package com.YaakoviCorp.Fit1337.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
 
 public class Exercise {
     @JsonProperty("name")
@@ -10,13 +9,14 @@ public class Exercise {
     @JsonProperty("muscle_group")
     MuscleGroup muscleGroup;
 
+    @JsonProperty("equipment")
     Equipment equipment;
 
-    float weight;
+    double weight;
 
     String imagePath;
 
-    public Exercise(String name, MuscleGroup muscleGroup, Equipment equipment, float weight, String imagePath) {
+    public Exercise(String name, MuscleGroup muscleGroup, Equipment equipment, double weight, String imagePath) {
         this.name = name;
         this.muscleGroup = muscleGroup;
         this.equipment = equipment;
@@ -27,13 +27,13 @@ public class Exercise {
     public String getName() {
         return this.name;
     }
-    public @Nullable Object getMuscleGroup() {
+    public MuscleGroup getMuscleGroup() {
         return this.muscleGroup;
     }
     public Equipment getEquipment() {
         return this.equipment;
     }
-    public float getWeight() {
+    public double getWeight() {
         return this.weight;
     }
     public String getImagePath() {

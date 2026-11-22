@@ -10,8 +10,10 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/api/public/user")
 public class FitUserController {
@@ -30,7 +32,7 @@ public class FitUserController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal AuthenticatedUser currentUser) {
         fitUserService.deleteUser(currentUser.username());
-        return ResponseEntity.status(HttpStatus.CREATED).body("user deleted successfully");
+        return ResponseEntity.ok("user deleted successfully");
     }
 
     @GetMapping("/profile")

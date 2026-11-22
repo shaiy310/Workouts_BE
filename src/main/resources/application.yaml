@@ -28,14 +28,14 @@ spring:
       validation-timeout: 5000
       keepalive-time: 30000
 
-    sql:
-      init:
-        mode: never
-        schema-locations: classpath:schema.sql
-        data-locations: classpath:data.sql
-    jpa:
-      hibernate:
-        ddl-auto: none
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  jpa:
+    hibernate:
+      ddl-auto: none
 
 redis:
   host: localhost

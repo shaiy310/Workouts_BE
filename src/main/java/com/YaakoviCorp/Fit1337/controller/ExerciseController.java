@@ -5,9 +5,8 @@ import com.YaakoviCorp.Fit1337.model.Exercise;
 import com.YaakoviCorp.Fit1337.model.MuscleGroup;
 import com.YaakoviCorp.Fit1337.service.ExerciseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/public/exercises")
 public class ExerciseController {
-    private final Logger logger = LogManager.getLogger(ExerciseController.class);
+    private static final Logger log = LoggerFactory.getLogger(ExerciseController.class);
 
-    @Autowired
-    private ExerciseService exerciseService;
+    private final ExerciseService exerciseService;
+
+    ExerciseController(ExerciseService exerciseService) {
+        this.exerciseService = exerciseService;
+    }
 
     @PostMapping()
     public Exercise addExercise(@RequestBody Exercise exercise) throws JsonProcessingException {
@@ -33,31 +35,31 @@ public class ExerciseController {
 
     @GetMapping("/{name}")
     public Exercise getExercise(@PathVariable String name) throws JsonProcessingException {
-        logger.debug("getting exercise: '{}'", name);
+        log.debug("getting exercise: '{}'", name);
         return exerciseService.getExercise(name);
     }
 
     @DeleteMapping("/{name}")
     public void deleteExercise(@PathVariable String name) {
-        logger.debug("deleting exercise: '{}'", name);
+        log.debug("deleting exercise: '{}'", name);
         exerciseService.deleteExercise(name);
     }
 
     @GetMapping()
     public List<Exercise> getAllExercises() {
-        logger.debug("getting all exercises");
+        log.debug("getting all exercises");
         return exerciseService.getAllExercises();
     }
 
     @GetMapping("/equipment")
     public List<Exercise> getAllExercisesByEquipment(@RequestParam Equipment e) {
-        logger.debug("getting all exercises with equipment '{}'", e);
+        log.debug("getting all exercises with equipment '{}'", e);
         return exerciseService.getExercisesByEquipment(e);
     }
 
     @GetMapping("/muscleGroup")
     public List<Exercise> getAllExercisesByMuscleGroup(@RequestParam MuscleGroup mg) {
-        logger.debug("getting all exercises with muscle group '{}'", mg);
+        log.debug("getting all exercises with muscle group '{}'", mg);
         return exerciseService.getExercisesByMuscleGroup(mg);
     }
 }

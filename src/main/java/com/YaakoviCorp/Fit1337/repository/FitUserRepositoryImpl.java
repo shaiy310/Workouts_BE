@@ -66,12 +66,13 @@ public class FitUserRepositoryImpl implements FitUserRepository {
 
     @Override
     public void deleteUser(String username) {
-
+        String sql = String.format("DELETE FROM %s WHERE username = ?", USERS_TABLE_NAME);
+        jdbcTemplate.update(sql, username);
     }
 
     @Override
     public void updateProfile(String username, UpdateFitUserProfileRequest fitUserRequest) {
-        String sql = String.format("UPDATE %s SET firstName=? lastName=?, email=? WHERE username=?", USERS_TABLE_NAME);
+        String sql = String.format("UPDATE %s SET first_name=?, last_name=?, email=? WHERE username=?", USERS_TABLE_NAME);
         jdbcTemplate.update(sql,
                 fitUserRequest.getFirstName(),
                 fitUserRequest.getLastName(),

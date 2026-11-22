@@ -2,7 +2,8 @@ package com.YaakoviCorp.Fit1337.service;
 
 import com.YaakoviCorp.Fit1337.model.Workout;
 import com.YaakoviCorp.Fit1337.repository.WorkoutRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +14,17 @@ import java.util.UUID;
 
 @Service
 public class WorkoutService{
-    @Autowired
-    private WorkoutRepository repo;
+    private static final Logger log = LoggerFactory.getLogger(WorkoutService.class);
+
+    private final WorkoutRepository repo;
+
+    WorkoutService(WorkoutRepository repo) {
+        this.repo = repo;
+    }
 
     @Transactional
     public Workout createWorkout(Workout workout, UUID authenticatedUserId) {
-        validateWorkout(workout);
+        validateWorkoutPayload(workout, authenticatedUserId);
         Workout ownedWorkout = new Workout(
                 null,
                 authenticatedUserId,
@@ -31,19 +37,18 @@ public class WorkoutService{
                 workout.sets()
         );
 
-        return repo.createWorkout(ownedWorkout);
+        Workout created = repo.createWorkout(ownedWorkout);
+        log.info("audit=workout_create outcome=success workoutId={} workoutName={}", workout.id(), workout.name());
+        return created;
     }
 
     @Transactional
     public Workout updateWorkout(UUID id, Workout incoming, UUID authenticatedUserId) {
-        validateWorkout(incoming);
+        validateWorkoutPayload(incoming, authenticatedUserId);
 
-        // TODO: validate permissions of authenticatedUserId
-
-        UUID userId = incoming.ownerId() != null ? incoming.ownerId() : authenticatedUserId;
         Workout toUpdate = new Workout(
                 id,
-                userId,
+                authenticatedUserId,
                 incoming.name(),
                 incoming.description(),
                 incoming.notes(),
@@ -79,7 +84,7 @@ public class WorkoutService{
         return repo.searchWorkouts(authenticatedUserId, name, description, maxDuration);
     }
 
-    private void validateWorkout(Workout workout) {
+    private void validateWorkoutPayload(Workout workout, UUID userId) {
         if (workout == null || workout.name() == null || workout.name().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Workout name is required");
         }
@@ -88,7 +93,7 @@ public class WorkoutService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Duration cannot be negative");
         }
 
-        if (workout.ownerId() == null) {
+        if (userId != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid ownerId is required");
         }
     }

@@ -12,6 +12,12 @@ public class FitUserRequest
     @NotBlank(message = "password is required")
     @Size(min = 4, max = 72, message = "password must be between 4 and 72 characters")
     private String password;
+
+    public FitUserRequest() {
+        this.username = "";
+        this.password = "";
+    }
+
     public FitUserRequest(String username, String password) {
         this.username = username;
         this.password = password;

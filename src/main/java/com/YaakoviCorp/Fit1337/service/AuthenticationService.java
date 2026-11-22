@@ -4,7 +4,6 @@ import com.YaakoviCorp.Fit1337.security.CustomUserDetailsService;
 import com.YaakoviCorp.Fit1337.security.model.AuthenticationRequest;
 import com.YaakoviCorp.Fit1337.security.model.AuthenticationResponse;
 import com.YaakoviCorp.Fit1337.utils.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,22 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    AuthenticationService(CustomUserDetailsService userDetailsService, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+    }
     
-    public AuthenticationResponse createAuthenticationToken(AuthenticationRequest authRequest) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
-        } catch (Exception exc) {
-            throw new Exception("Invalid username and/or password");
-        }
+    public AuthenticationResponse createAuthenticationToken(AuthenticationRequest authRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.username());
         return new AuthenticationResponse(jwtUtil.generateToken(userDetails));
