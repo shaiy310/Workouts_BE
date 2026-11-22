@@ -3,6 +3,8 @@ package com.YaakoviCorp.Fit1337.repository;
 import com.YaakoviCorp.Fit1337.model.ExerciseSet;
 import com.YaakoviCorp.Fit1337.model.Workout;
 import com.YaakoviCorp.Fit1337.model.WorkoutSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,6 +18,7 @@ import java.util.*;
 
 @Repository
 public class WorkoutRepositoryImpl implements WorkoutRepository{
+    private static final Logger log = LoggerFactory.getLogger(WorkoutRepositoryImpl.class);
     static final String WORKOUT_TABLE_NAME = "workouts";
     static final String WORKOUT_SET_TABLE_NAME = "workout_sets";
     static final String SET_EXERCISE_TABLE_NAME = "workout_set_exercises";
@@ -70,7 +73,9 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
         );
 
         insertSetsAndExercises(workoutId, workout.sets());
-        return findByIdAndOwnerId(workoutId, workout.ownerId()).orElseThrow();
+        Workout created = findByIdAndOwnerId(workoutId, workout.ownerId()).orElseThrow();
+        log.debug("repository=workout_create outcome=success workoutId={} userId={}", workoutId, workout.ownerId());
+        return created;
     }
 
     @Override
@@ -101,6 +106,7 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
                         .addValue("notes", trimOrNull(workout.notes()))
         );
         if (updatedRows == 0) {
+            log.debug("repository=workout_update outcome=not_found workoutId={} userId={}", workout.id(), workout.ownerId());
             return Optional.empty();
         }
 
@@ -111,7 +117,9 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
         );
 
         insertSetsAndExercises(workout.id(), workout.sets());
-        return findByIdAndOwnerId(workout.id(), workout.ownerId());
+        Optional<Workout> updated = findByIdAndOwnerId(workout.id(), workout.ownerId());
+        log.debug("repository=workout_update outcome=success workoutId={} userId={}", workout.id(), workout.ownerId());
+        return updated;
     }
 
     @Override
@@ -129,7 +137,10 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
                 WORKOUT_LIST_EXTRACTOR
         );
 
-        return (results == null || results.isEmpty()) ? Optional.empty() : Optional.of(results.getFirst());
+        Optional<Workout> workout = (results == null || results.isEmpty()) ? Optional.empty() : Optional.of(results.getFirst());
+        log.debug("repository=workout_read outcome={} workoutId={} userId={}",
+                workout.isPresent() ? "success" : "not_found", id, ownerId);
+        return workout;
     }
 
     @Override
@@ -141,7 +152,10 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
                         .addValue("id", id)
                         .addValue("ownerId", ownerId)
         );
-        return deleted > 0;
+        boolean wasDeleted = deleted > 0;
+        log.debug("repository=workout_delete outcome={} workoutId={} userId={}",
+                wasDeleted ? "success" : "not_found", id, ownerId);
+        return wasDeleted;
     }
 
     @Override
@@ -167,6 +181,8 @@ public class WorkoutRepositoryImpl implements WorkoutRepository{
         sql.append(" ORDER BY w.name DESC, ws.set_order ASC, wse.exercise_order ASC");
 
         List<Workout> results = jdbc.query(sql.toString(), params, WORKOUT_LIST_EXTRACTOR);
+        log.debug("repository=workout_search outcome=success userId={} resultCount={}",
+                ownerId, results == null ? 0 : results.size());
         return results != null ? results : List.of();
     }
 

@@ -4,6 +4,8 @@ package com.YaakoviCorp.Fit1337.service;
 import com.YaakoviCorp.Fit1337.model.ExerciseWeight;
 import com.YaakoviCorp.Fit1337.model.WeightChangeEvent;
 import com.YaakoviCorp.Fit1337.repository.ExerciseWeightRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @Service
 public class ExerciseWeightService{
+    private static final Logger log = LoggerFactory.getLogger(ExerciseWeightService.class);
     private final ExerciseWeightRepository repo;
     private final ActivityEventService eventService;
 
@@ -25,7 +28,9 @@ public class ExerciseWeightService{
 
     @Transactional(readOnly = true)
     public List<ExerciseWeight> getUserWeights(UUID userId) {
-        return repo.findAllByUserId(userId);
+        List<ExerciseWeight> weights = repo.findAllByUserId(userId);
+        log.debug("service=exercise_weights_read outcome=success userId={} resultCount={}", userId, weights.size());
+        return weights;
     }
 
     @Transactional
@@ -52,6 +57,7 @@ public class ExerciseWeightService{
             eventService.recordEvent(event, userId);
         }
 
+        log.info("service=exercise_weight_update outcome=success userId={} exerciseName={}", userId, normalizedExercise);
         return updated;
     }
 
@@ -60,8 +66,10 @@ public class ExerciseWeightService{
         String normalizedExercise = normalizeExerciseName(exerciseName);
         boolean deleted = repo.deleteByUserIdAndExerciseName(userId, normalizedExercise);
         if (!deleted) {
+            log.warn("service=exercise_weight_delete outcome=failed reason=not_found userId={} exerciseName={}", userId, normalizedExercise);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Exercise weight not found");
         }
+        log.info("service=exercise_weight_delete outcome=success userId={} exerciseName={}", userId, normalizedExercise);
     }
 
     private String normalizeExerciseName(String exerciseName) {

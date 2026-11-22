@@ -1,6 +1,8 @@
 package com.YaakoviCorp.Fit1337.repository;
 
 import com.YaakoviCorp.Fit1337.model.ExerciseWeight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @Repository
 class ExerciseWeightRepositoryImpl implements ExerciseWeightRepository{
+    private static final Logger log = LoggerFactory.getLogger(ExerciseWeightRepositoryImpl.class);
     static final String WEIGHT_TABLE_NAME = "user_exercise_weights";
 
     private final NamedParameterJdbcTemplate jdbc;
@@ -34,7 +37,9 @@ class ExerciseWeightRepositoryImpl implements ExerciseWeightRepository{
                 ORDER BY LOWER(exercise_name) ASC
                 """.formatted(WEIGHT_TABLE_NAME);
 
-        return jdbc.query(sql, new MapSqlParameterSource("userId", userId), WEIGHT_ROW_MAPPER);
+        List<ExerciseWeight> weights = jdbc.query(sql, new MapSqlParameterSource("userId", userId), WEIGHT_ROW_MAPPER);
+        log.debug("repository=exercise_weights_read outcome=success userId={} resultCount={}", userId, weights.size());
+        return weights;
     }
 
     @Override
@@ -53,7 +58,10 @@ class ExerciseWeightRepositoryImpl implements ExerciseWeightRepository{
                 WEIGHT_ROW_MAPPER
         );
 
-        return rows.stream().findFirst();
+        Optional<ExerciseWeight> weight = rows.stream().findFirst();
+        log.debug("repository=exercise_weight_read outcome={} userId={} exerciseName={}",
+                weight.isPresent() ? "success" : "not_found", userId, exerciseName);
+        return weight;
     }
 
     @Override
@@ -79,7 +87,9 @@ class ExerciseWeightRepositoryImpl implements ExerciseWeightRepository{
             jdbc.update(insertSql, params);
         }
 
-        return findByUserIdAndExerciseName(userId, exerciseName).orElseThrow();
+        ExerciseWeight saved = findByUserIdAndExerciseName(userId, exerciseName).orElseThrow();
+        log.debug("repository=exercise_weight_upsert outcome=success userId={} exerciseName={}", userId, exerciseName);
+        return saved;
     }
 
     @Override
@@ -95,7 +105,10 @@ class ExerciseWeightRepositoryImpl implements ExerciseWeightRepository{
                         .addValue("userId", userId)
                         .addValue("exerciseName", exerciseName)
         );
-        return deleted > 0;
+        boolean wasDeleted = deleted > 0;
+        log.debug("repository=exercise_weight_delete outcome={} userId={} exerciseName={}",
+                wasDeleted ? "success" : "not_found", userId, exerciseName);
+        return wasDeleted;
     }
 
     private static ExerciseWeight mapRow(ResultSet rs, int rowNum) throws SQLException {

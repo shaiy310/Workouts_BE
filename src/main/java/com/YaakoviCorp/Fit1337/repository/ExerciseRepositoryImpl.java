@@ -20,7 +20,7 @@ import java.util.List;
 public class ExerciseRepositoryImpl  implements ExerciseRepository {
     static final String EXERCISE_TABLE_NAME = "exercises";
 
-    private final Logger logger = LoggerFactory.getLogger(ExerciseRepositoryImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ExerciseRepositoryImpl.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -43,7 +43,9 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
                 exercise.getImagePath()
         );
 
-        return getExerciseFromDB(exercise.getName());
+        Exercise created = getExerciseFromDB(exercise.getName());
+        log.debug("repository=exercise_create outcome=success exerciseName={}", created.getName());
+        return created;
     }
 
     @Override
@@ -57,17 +59,23 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
                 exercise.getName()
         );
 
-        return getExerciseFromDB(exercise.getName());
+        Exercise updated = getExerciseFromDB(exercise.getName());
+        log.debug("repository=exercise_update outcome=success exerciseName={}", updated.getName());
+        return updated;
     }
 
     @Override
     public Exercise getExercise(String name) throws JsonProcessingException {
         String cacheExercise = cacheRepository.getCacheEntity(name);
         if  (cacheExercise != null) {
-            return objectMapper.readValue(cacheExercise, Exercise.class);
+            Exercise exercise = objectMapper.readValue(cacheExercise, Exercise.class);
+            log.debug("repository=exercise_read outcome=success source=cache exerciseName={}", name);
+            return exercise;
         }
 
-        return getExerciseFromDB(name);
+        Exercise exercise = getExerciseFromDB(name);
+        log.debug("repository=exercise_read outcome=success source=db exerciseName={}", name);
+        return exercise;
     }
 
     @Override
@@ -75,16 +83,19 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
         String sql = String.format("DELETE FROM %s WHERE name=?", EXERCISE_TABLE_NAME);
         jdbcTemplate.update(sql, name);
         cacheRepository.removeCacheEntity(name);
+        log.debug("repository=exercise_delete outcome=success exerciseName={}", name);
     }
 
     @Override
     public List<Exercise> getAllExercises() {
         String sql = String.format("SELECT * FROM %s", EXERCISE_TABLE_NAME);
         try {
-            return jdbcTemplate.query(sql, new ExerciseMapper());
+            List<Exercise> exercises = jdbcTemplate.query(sql, new ExerciseMapper());
+            log.debug("repository=exercise_list outcome=success resultCount={}", exercises.size());
+            return exercises;
 
         } catch (EmptyResultDataAccessException e) {
-            logger.error("No exercises found");
+            log.error("repository=exercise_list outcome=failed reason=no_exercises");
             return null;
         }
     }
@@ -93,10 +104,12 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
     public List<Exercise> getExercisesByEquipment(Equipment equipment) {
         String sql = String.format("SELECT * FROM %s WHERE equipment=?", EXERCISE_TABLE_NAME);
         try {
-            return jdbcTemplate.query(sql, new ExerciseMapper(), equipment.name());
+            List<Exercise> exercises = jdbcTemplate.query(sql, new ExerciseMapper(), equipment.name());
+            log.debug("repository=exercise_list outcome=success filter=equipment equipment={} resultCount={}", equipment, exercises.size());
+            return exercises;
 
         } catch (EmptyResultDataAccessException e) {
-            logger.error("No exercises with equipment {} found", equipment);
+            log.error("repository=exercise_list outcome=failed reason=no_exercises filter=equipment equipment={}", equipment);
             return null;
         }
     }
@@ -104,7 +117,10 @@ public class ExerciseRepositoryImpl  implements ExerciseRepository {
     @Override
     public List<Exercise> getExercisesByMuscleGroup(MuscleGroup muscleGroup) {
         String sql = String.format("SELECT * FROM %s WHERE muscle_group=?", EXERCISE_TABLE_NAME);
-        return jdbcTemplate.query(sql, new ExerciseMapper(), muscleGroup.name());
+        List<Exercise> exercises = jdbcTemplate.query(sql, new ExerciseMapper(), muscleGroup.name());
+        log.debug("repository=exercise_list outcome=success filter=muscle_group muscleGroup={} resultCount={}",
+                muscleGroup, exercises.size());
+        return exercises;
     }
 
     private Exercise getExerciseFromDB(String name) throws JsonProcessingException {

@@ -7,6 +7,8 @@ import com.YaakoviCorp.Fit1337.service.ExerciseWeightService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/weights")
 public class ExerciseWeightController {
+    private static final Logger log = LoggerFactory.getLogger(ExerciseWeightController.class);
     private final ExerciseWeightService weightService;
 
     public ExerciseWeightController(ExerciseWeightService weightService) {
@@ -28,7 +31,10 @@ public class ExerciseWeightController {
     @GetMapping
     public ResponseEntity<List<ExerciseWeight>> getWeights(
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
-        return ResponseEntity.ok(weightService.getUserWeights(currentUser.id()));
+        List<ExerciseWeight> weights = weightService.getUserWeights(currentUser.id());
+        log.debug("controller=exercise_weights_read outcome=success userId={} resultCount={}",
+                currentUser.id(), weights.size());
+        return ResponseEntity.ok(weights);
     }
 
     // POST /api/weights/{exerciseName}
@@ -38,6 +44,8 @@ public class ExerciseWeightController {
             @RequestBody @Valid WeightUpdateRequest request,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
         ExerciseWeight updated = weightService.updateWeight(currentUser.id(), exerciseName, request.weight());
+        log.info("controller=exercise_weight_update outcome=success userId={} exerciseName={}",
+                currentUser.id(), exerciseName.trim());
         return ResponseEntity.ok(updated);
     }
 
@@ -47,6 +55,8 @@ public class ExerciseWeightController {
             @PathVariable @NotBlank @Size(max = 200) String exerciseName,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
         weightService.deleteWeight(currentUser.id(), exerciseName);
+        log.info("controller=exercise_weight_delete outcome=success userId={} exerciseName={}",
+                currentUser.id(), exerciseName.trim());
         return ResponseEntity.noContent().build();
     }
 }

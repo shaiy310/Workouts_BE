@@ -25,41 +25,50 @@ public class ExerciseController {
 
     @PostMapping()
     public Exercise addExercise(@RequestBody Exercise exercise) throws JsonProcessingException {
-        return exerciseService.createExercise(exercise);
+        Exercise created = exerciseService.createExercise(exercise);
+        log.info("controller=exercise_create outcome=success exerciseName={}", created.getName());
+        return created;
     }
 
     @PutMapping()
     public Exercise updateExercise(@RequestBody Exercise exercise) throws JsonProcessingException {
-        return exerciseService.updateExercise(exercise);
+        Exercise updated = exerciseService.updateExercise(exercise);
+        log.info("controller=exercise_update outcome=success exerciseName={}", updated.getName());
+        return updated;
     }
 
     @GetMapping("/{name}")
     public Exercise getExercise(@PathVariable String name) throws JsonProcessingException {
-        log.debug("getting exercise: '{}'", name);
-        return exerciseService.getExercise(name);
+        Exercise exercise = exerciseService.getExercise(name);
+        log.debug("controller=exercise_read outcome=success exerciseName={}", name);
+        return exercise;
     }
 
     @DeleteMapping("/{name}")
     public void deleteExercise(@PathVariable String name) {
-        log.debug("deleting exercise: '{}'", name);
         exerciseService.deleteExercise(name);
+        log.info("controller=exercise_delete outcome=success exerciseName={}", name);
     }
 
     @GetMapping()
     public List<Exercise> getAllExercises() {
-        log.debug("getting all exercises");
-        return exerciseService.getAllExercises();
+        List<Exercise> exercises = exerciseService.getAllExercises();
+        log.debug("controller=exercise_list outcome=success resultCount={}", exercises.size());
+        return exercises;
     }
 
     @GetMapping("/equipment")
     public List<Exercise> getAllExercisesByEquipment(@RequestParam Equipment e) {
-        log.debug("getting all exercises with equipment '{}'", e);
-        return exerciseService.getExercisesByEquipment(e);
+        List<Exercise> exercises = exerciseService.getExercisesByEquipment(e);
+        log.debug("controller=exercise_list outcome=success filter=equipment equipment={} resultCount={}", e, exercises.size());
+        return exercises;
     }
 
     @GetMapping("/muscleGroup")
     public List<Exercise> getAllExercisesByMuscleGroup(@RequestParam MuscleGroup mg) {
-        log.debug("getting all exercises with muscle group '{}'", mg);
-        return exerciseService.getExercisesByMuscleGroup(mg);
+        List<Exercise> exercises = exerciseService.getExercisesByMuscleGroup(mg);
+        log.debug("controller=exercise_list outcome=success filter=muscle_group muscleGroup={} resultCount={}",
+                mg, exercises.size());
+        return exercises;
     }
 }

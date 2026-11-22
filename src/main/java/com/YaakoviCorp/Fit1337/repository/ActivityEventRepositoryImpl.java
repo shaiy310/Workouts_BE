@@ -3,6 +3,8 @@ package com.YaakoviCorp.Fit1337.repository;
 import com.YaakoviCorp.Fit1337.model.ActivityEvent;
 import com.YaakoviCorp.Fit1337.model.WeightChangeEvent;
 import com.YaakoviCorp.Fit1337.model.WorkoutEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 @Repository
 public class ActivityEventRepositoryImpl implements ActivityEventRepository {
+    private static final Logger log = LoggerFactory.getLogger(ActivityEventRepositoryImpl.class);
 
     static final String EVENT_TABLE_NAME = "activity_events";
 
@@ -50,7 +53,9 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
 
         sql.append(" ORDER BY event_date DESC, id DESC");
 
-        return jdbc.query(sql.toString(), params, EVENT_ROW_MAPPER);
+        List<ActivityEvent> events = jdbc.query(sql.toString(), params, EVENT_ROW_MAPPER);
+        log.debug("repository=activity_events_read outcome=success userId={} resultCount={}", userId, events.size());
+        return events;
     }
 
     @Override
@@ -66,7 +71,10 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                 new MapSqlParameterSource().addValue("userId", userId).addValue("date", date),
                 EVENT_ROW_MAPPER
         );
-        return rows.stream().filter(WorkoutEvent.class::isInstance).map(WorkoutEvent.class::cast).findFirst();
+        Optional<WorkoutEvent> event = rows.stream().filter(WorkoutEvent.class::isInstance).map(WorkoutEvent.class::cast).findFirst();
+        log.debug("repository=workout_event_read outcome={} userId={} eventDate={}",
+                event.isPresent() ? "success" : "not_found", userId, date);
+        return event;
     }
 
     @Override
@@ -88,7 +96,10 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                         .addValue("date", date),
                 EVENT_ROW_MAPPER
         );
-        return rows.stream().filter(WeightChangeEvent.class::isInstance).map(WeightChangeEvent.class::cast).findFirst();
+        Optional<WeightChangeEvent> event = rows.stream().filter(WeightChangeEvent.class::isInstance).map(WeightChangeEvent.class::cast).findFirst();
+        log.debug("repository=weight_event_read outcome={} userId={} exerciseName={} eventDate={}",
+                event.isPresent() ? "success" : "not_found", userId, exerciseName, date);
+        return event;
     }
 
     @Override
@@ -106,7 +117,9 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                 .addValue("workoutName", event.workoutName())
                 .addValue("workoutDescription", event.workoutDescription()));
 
-        return new WorkoutEvent(id, event.date(), event.workoutName(), event.workoutDescription());
+        WorkoutEvent saved = new WorkoutEvent(id, event.date(), event.workoutName(), event.workoutDescription());
+        log.debug("repository=workout_event_save outcome=success eventId={} userId={}", id, userId);
+        return saved;
     }
 
     @Override
@@ -124,6 +137,7 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                 .addValue("workoutName", event.workoutName())
                 .addValue("workoutDescription", event.workoutDescription()));
 
+        log.debug("repository=workout_event_update outcome=success eventId={} userId={}", event.id(), userId);
         return event;
     }
 
@@ -143,7 +157,9 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                 .addValue("prevWeight", event.prevWeight())
                 .addValue("newWeight", event.newWeight()));
 
-        return new WeightChangeEvent(id, event.date(), event.exerciseName(), event.prevWeight(), event.newWeight());
+        WeightChangeEvent saved = new WeightChangeEvent(id, event.date(), event.exerciseName(), event.prevWeight(), event.newWeight());
+        log.debug("repository=weight_event_save outcome=success eventId={} userId={}", id, userId);
+        return saved;
     }
 
     @Override
@@ -161,6 +177,7 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
                 .addValue("prevWeight", event.prevWeight())
                 .addValue("newWeight", event.newWeight()));
 
+        log.debug("repository=weight_event_update outcome=success eventId={} userId={}", event.id(), userId);
         return event;
     }
 
@@ -168,6 +185,7 @@ public class ActivityEventRepositoryImpl implements ActivityEventRepository {
     public void deleteByIdAndUserId(UUID id, UUID userId) {
         String sql = "DELETE FROM %s WHERE id = :id AND user_id = :userId".formatted(EVENT_TABLE_NAME);
         jdbc.update(sql, new MapSqlParameterSource().addValue("id", id).addValue("userId", userId));
+        log.debug("repository=activity_event_delete outcome=success eventId={} userId={}", id, userId);
     }
 
     private static ActivityEvent mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -32,6 +32,7 @@ public class WorkoutController {
             @RequestBody @Valid Workout workout,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
         Workout created = workoutService.createWorkout(workout, currentUser.id());
+        log.info("controller=workout_create outcome=success workoutId={} userId={}", created.id(), currentUser.id());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -42,6 +43,7 @@ public class WorkoutController {
             @RequestBody @Valid Workout workout,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
         Workout updated = workoutService.updateWorkout(id, workout, currentUser.id());
+        log.info("controller=workout_update outcome=success workoutId={} userId={}", id, currentUser.id());
         return ResponseEntity.ok(updated);
     }
 
@@ -50,7 +52,10 @@ public class WorkoutController {
     public ResponseEntity<Workout> getWorkout(
             @PathVariable UUID id,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
-        return ResponseEntity.ok(workoutService.getWorkoutById(id, currentUser.id()));    }
+        Workout workout = workoutService.getWorkoutById(id, currentUser.id());
+        log.debug("controller=workout_read outcome=success workoutId={} userId={}", id, currentUser.id());
+        return ResponseEntity.ok(workout);
+    }
 
     // DELETE /api/workouts/{name}
     @DeleteMapping("/{id}")
@@ -58,6 +63,7 @@ public class WorkoutController {
             @PathVariable UUID id,
             @AuthenticationPrincipal AuthenticatedUser currentUser) {
         workoutService.deleteWorkoutById(id, currentUser.id());
+        log.info("controller=workout_delete outcome=success workoutId={} userId={}", id, currentUser.id());
         return ResponseEntity.noContent().build();
     }
 
@@ -75,6 +81,8 @@ public class WorkoutController {
                 description,
                 maxDuration
         );
+        log.debug("controller=workout_search outcome=success userId={} resultCount={}",
+                currentUser.id(), workouts.size());
         return ResponseEntity.ok(workouts);
     }
 }

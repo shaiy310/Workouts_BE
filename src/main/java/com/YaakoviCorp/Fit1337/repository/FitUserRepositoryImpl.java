@@ -3,6 +3,8 @@ package com.YaakoviCorp.Fit1337.repository;
 import com.YaakoviCorp.Fit1337.model.FitUser;
 import com.YaakoviCorp.Fit1337.model.UpdateFitUserProfileRequest;
 import com.YaakoviCorp.Fit1337.repository.mapper.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +14,7 @@ import java.util.UUID;
 
 @Repository
 public class FitUserRepositoryImpl implements FitUserRepository {
+    private static final Logger log = LoggerFactory.getLogger(FitUserRepositoryImpl.class);
     static final String USERS_TABLE_NAME = "users";
 
     @Autowired
@@ -28,7 +31,9 @@ public class FitUserRepositoryImpl implements FitUserRepository {
                 fitUser.getPermissions()
         );
 
-        return getUser(fitUser.getUsername());
+        FitUser created = getUser(fitUser.getUsername());
+        log.debug("repository=user_create outcome=success username={}", created.getUsername());
+        return created;
     }
 
     @Override
@@ -39,6 +44,7 @@ public class FitUserRepositoryImpl implements FitUserRepository {
                     new UserMapper(),
                     username);
         } catch (EmptyResultDataAccessException exc) {
+            log.debug("repository=user_read outcome=not_found username={}", username);
             return null;
         }
     }
@@ -51,6 +57,7 @@ public class FitUserRepositoryImpl implements FitUserRepository {
                     new UserMapper(),
                     id);
         } catch (EmptyResultDataAccessException exc) {
+            log.debug("repository=user_read outcome=not_found userId={}", id);
             return null;
         }
     }
@@ -60,13 +67,16 @@ public class FitUserRepositoryImpl implements FitUserRepository {
         String sql = String.format("UPDATE %s SET password=? WHERE username=?", USERS_TABLE_NAME);
         jdbcTemplate.update(sql, password, username);
 
-        return getUser(username);
+        FitUser updated = getUser(username);
+        log.debug("repository=user_password_update outcome=success username={}", username);
+        return updated;
     }
 
     @Override
     public void deleteUser(String username) {
         String sql = String.format("DELETE FROM %s WHERE username = ?", USERS_TABLE_NAME);
         jdbcTemplate.update(sql, username);
+        log.debug("repository=user_delete outcome=success username={}", username);
     }
 
     @Override
@@ -78,5 +88,6 @@ public class FitUserRepositoryImpl implements FitUserRepository {
                 fitUserRequest.getEmail(),
                 username
                 );
+        log.debug("repository=user_profile_update outcome=success username={}", username);
     }
 }

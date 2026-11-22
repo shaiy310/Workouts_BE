@@ -4,6 +4,8 @@ import com.YaakoviCorp.Fit1337.model.ActivityEvent;
 import com.YaakoviCorp.Fit1337.model.WeightChangeEvent;
 import com.YaakoviCorp.Fit1337.model.WorkoutEvent;
 import com.YaakoviCorp.Fit1337.repository.ActivityEventRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @Service
 public class ActivityEventService {
+    private static final Logger log = LoggerFactory.getLogger(ActivityEventService.class);
 
     private final ActivityEventRepository repo;
 
@@ -31,7 +34,9 @@ public class ActivityEventService {
                     "'start' must be before 'end' (end is exclusive)"
             );
         }
-        return repo.findAllByUserId(userId, start, end);
+        List<ActivityEvent> events = repo.findAllByUserId(userId, start, end);
+        log.debug("service=activity_events_read outcome=success userId={} resultCount={}", userId, events.size());
+        return events;
     }
 
     @Transactional
@@ -42,10 +47,13 @@ public class ActivityEventService {
 
         LocalDate eventDate = incoming.date() != null ? incoming.date() : LocalDate.now();
 
-        return switch (incoming) {
+        Optional<ActivityEvent> recorded = switch (incoming) {
             case WorkoutEvent w -> Optional.of(handleWorkoutEvent(w, eventDate, userId));
             case WeightChangeEvent wc -> handleWeightEvent(wc, eventDate, userId);
         };
+        log.info("service=activity_event_record outcome=success userId={} eventDate={} eventType={} recorded={}",
+                userId, eventDate, incoming.getClass().getSimpleName(), recorded.isPresent());
+        return recorded;
     }
 
     private WorkoutEvent handleWorkoutEvent(WorkoutEvent incoming, LocalDate eventDate, UUID userId) {

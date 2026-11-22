@@ -29,13 +29,13 @@ public class AuthenticationController {
         String username = authRequest.username();
         try {
             var response = authService.createAuthenticationToken(authRequest);
-            log.info("audit=auth_login outcome=success username={}", username);
+            log.info("controller=auth_login outcome=success username={}", username);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex) {
-            log.warn("audit=auth_login outcome=failed reason=bad_credentials username={}", username);
+            log.warn("controller=auth_login outcome=failed reason=bad_credentials username={}", username);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect credentials");
         } catch (Exception ex) {
-            log.error("audit=auth_login outcome=error username={}", username, ex);
+            log.error("controller=auth_login outcome=error username={}", username, ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Authentication error");
         }
     }

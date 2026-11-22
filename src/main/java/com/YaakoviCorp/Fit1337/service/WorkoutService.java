@@ -38,7 +38,7 @@ public class WorkoutService{
         );
 
         Workout created = repo.createWorkout(ownedWorkout);
-        log.info("audit=workout_create outcome=success workoutId={} workoutName={}", workout.id(), workout.name());
+        log.info("service=workout_create outcome=success workoutId={} workoutName={}", created.id(), created.name());
         return created;
     }
 
@@ -58,22 +58,28 @@ public class WorkoutService{
                 incoming.sets()
         );
 
-        return repo.updateWorkout(toUpdate)
+        Workout updated = repo.updateWorkout(toUpdate)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+        log.info("service=workout_update outcome=success workoutId={} userId={}", updated.id(), authenticatedUserId);
+        return updated;
     }
 
     @Transactional(readOnly = true)
     public Workout getWorkoutById(UUID id, UUID authenticatedUserId) {
-        return repo.findByIdAndOwnerId(id, authenticatedUserId)
+        Workout workout = repo.findByIdAndOwnerId(id, authenticatedUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+        log.debug("service=workout_read outcome=success workoutId={} userId={}", id, authenticatedUserId);
+        return workout;
     }
 
     @Transactional
     public void deleteWorkoutById(UUID id, UUID authenticatedUserId) {
         boolean deleted = repo.deleteByIdAndOwnerId(id, authenticatedUserId);
         if (!deleted) {
+            log.warn("service=workout_delete outcome=failed reason=not_found workoutId={} userId={}", id, authenticatedUserId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found");
         }
+        log.info("service=workout_delete outcome=success workoutId={} userId={}", id, authenticatedUserId);
     }
 
     @Transactional(readOnly = true)
@@ -81,7 +87,9 @@ public class WorkoutService{
         if (maxDuration != null && maxDuration <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "maxDuration must be greater than 0");
         }
-        return repo.searchWorkouts(authenticatedUserId, name, description, maxDuration);
+        List<Workout> workouts = repo.searchWorkouts(authenticatedUserId, name, description, maxDuration);
+        log.debug("service=workout_search outcome=success userId={} resultCount={}", authenticatedUserId, workouts.size());
+        return workouts;
     }
 
     private void validateWorkoutPayload(Workout workout, UUID userId) {

@@ -30,25 +30,30 @@ public class FitUserController {
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody @Valid FitUserRequest fitUserRequest) {
         FitUser user = fitUserService.createUser(fitUserRequest);
+        log.info("controller=user_create outcome=success username={}", user.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body("user %s created successfully".formatted(user.getUsername()));
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal AuthenticatedUser currentUser) {
         fitUserService.deleteUser(currentUser.username());
+        log.info("controller=user_delete outcome=success username={}", currentUser.username());
         return ResponseEntity.ok("user deleted successfully");
     }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal AuthenticatedUser currentUser) {
         UserProfileResponse userProfile = fitUserService.getProfile(currentUser.username());
+        log.debug("controller=profile_read outcome=success username={}", currentUser.username());
         return ResponseEntity.ok(userProfile);
     }
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateMyProfile(@RequestBody @Valid UpdateFitUserProfileRequest fitUserRequest,
                                              @AuthenticationPrincipal AuthenticatedUser currentUser) {
-        return ResponseEntity.ok(fitUserService.updateProfile(currentUser.username(), fitUserRequest));
+        UserProfileResponse profile = fitUserService.updateProfile(currentUser.username(), fitUserRequest);
+        log.info("controller=profile_update outcome=success username={}", currentUser.username());
+        return ResponseEntity.ok(profile);
     }
 }
 
