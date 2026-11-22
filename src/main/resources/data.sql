@@ -1,77 +1,75 @@
-INSERT INTO users (id, username, password, active, roles, permissions, firstName, lastName, email) VALUES
-    (1,'yaakovi', 'asdf', 1, 'ADMIN', '', 'Shai', 'Yaakovi', 'y@a.com'),
-    (2,'shai', '12345', 1, 'USER', '', 'Shai', 'Yaakovi', 'a@a.com')
+INSERT INTO users (username, password, active, roles, permissions, first_name, last_name, email) VALUES
+    ('yaakovi', '<TBD>', 1, 'ADMIN', '', 'Shai', 'Yaakovi', 'y@a.com'),
+    ('shai', '<TBD>>', 1, 'USER', '', 'Shai', 'Yaakovi', 'a@a.com')
 ;
 
 INSERT INTO exercises (name, muscle_group, equipment, weight, imagePath) VALUES
-    ('Ab Wheel Rollouts / Barbell Rollouts', 'Abs', 'BARBELL', 0, ''),
-    ('Barbell Back Squat', 'Quadriceps', 'BARBELL', 0, ''),
+    ('Ab Wheel Rollouts / Barbell Rollouts',   'Abs', 'BARBELL', 0, '/Imgs/Ab Wheel Rollouts / Barbell Rollouts.gif'),
+    ('Barbell Back Squat', 'Quadriceps', 'BARBELL', 0, '/Imgs/Barbell Back Squat.gif'),
     ('Barbell Flat Bench Press', 'Chest', 'BARBELL', 18, '/Imgs/Barbell Flat Bench Press.gif'),
-    ('Barbell Front Squat', 'Quadriceps', 'BARBELL', 0, ''),
-    ('Barbell Hip Thrusts (Bench Supported)', 'Glutes', 'BARBELL', 0, ''),
-    ('Barbell Preacher Curls (Bench Supported)', 'Biceps', 'BARBELL', 0, ''),
-    ('Barbell Romanian Deadlift (RDL)', 'Hamstrings', 'BARBELL', 18, '/Imgs/Barbell Romanian Deadlift.gif'),
-    ('Barbell Upright Rows', 'Shoulders', 'BARBELL', 0, ''),
-    ('Barbell Bent-Over Underhand Row', 'Back', 'BARBELL', 0, ''),
+    ('Barbell Front Squat', 'Quadriceps', 'BARBELL', 0, '/Imgs/Barbell Front Squat.gif'),
+    ('Barbell Hip Thrusts (Bench Supported)', 'Glutes', 'BARBELL', 0, '/Imgs/Barbell Hip Thrusts (Bench Supported).gif'),
+    ('Barbell Preacher Curls (Bench Supported)', 'Biceps', 'BARBELL', 0, '/Imgs/Barbell Preacher Curls (Bench Supported).gif'),
+    ('Barbell Romanian Deadlift (RDL)', 'Hamstrings', 'BARBELL', 18, '/Imgs/Barbell Romanian Deadlift (RDL).gif'),
+    ('Barbell Upright Rows', 'Shoulders', 'BARBELL', 0, '/Imgs/Barbell Upright Rows.gif'),
+    ('Barbell Bent-Over Underhand Row', 'Back', 'BARBELL', 0, '/Imgs/Barbell Bent-Over Underhand Row.gif'),
     ('Bench Dips', 'Triceps', 'BODYWEIGHT', 0, '/Imgs/Bench Dips.gif'),
-    ('Bench Seated Knee Tucks', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Bench Crunch.gif'),
+    ('Bench Seated Knee Tucks', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Bench Seated Knee Tucks.gif'),
     ('Bent-Over Barbell Row', 'Back', 'BARBELL', 18, '/Imgs/Bent-Over Barbell Row.gif'),
     ('Bulgarian Split Squats', 'Quadriceps', 'BODYWEIGHT', 0, '/Imgs/Bulgarian Split Squats.gif'),
     ('Chest-Supported Dumbbell Row', 'Back', 'DUMBBELL', 12, '/Imgs/Chest-Supported Dumbbell Row.gif'),
     ('Close-Grip Barbell Bench Press', 'Triceps', 'BARBELL', 13, '/Imgs/Close-Grip Barbell Bench Press.gif'),
     ('Concentration Curls', 'Biceps', 'DUMBBELL', 9.75, '/Imgs/Concentration Curls.gif'),
-    ('Decline Dumbbell Bench Press', 'Chest', 'DUMBBELL', 0, ''),
-    ('Decline Push-Ups', 'Chest', 'BODYWEIGHT', 0, ''),
-    ('Diamond Push-Ups', 'Triceps', 'BODYWEIGHT', 0, ''),
-    ('Dumbbell Bench Press', 'Chest', 'DUMBBELL', 0, ''),
-    ('Dumbbell Chest Flyes', 'Chest', 'DUMBBELL', 6.75, ''),
-    ('Dumbbell Front Raises', 'Shoulders', 'DUMBBELL', 0, ''),
+    ('Decline Dumbbell Bench Press', 'Chest', 'DUMBBELL', 0, '/Imgs/Decline Dumbbell Bench Press.gif'),
+    ('Decline Push-Ups', 'Chest', 'BODYWEIGHT', 0, '/Imgs/Decline Push-Ups.gif'),
+    ('Diamond Push-Ups', 'Triceps', 'BODYWEIGHT', 0, '/Imgs/Diamond Push-Ups.gif'),
+    ('Dumbbell Bench Press', 'Chest', 'DUMBBELL', 0, '/Imgs/Dumbbell Bench Press.gif'),
+    ('Dumbbell Chest Flyes', 'Chest', 'DUMBBELL', 6.75, '/Imgs/Dumbbell Chest Flyes.gif'),
+    ('Dumbbell Front Raises', 'Shoulders', 'DUMBBELL', 0, '/Imgs/Dumbbell Front Raises.gif'),
     ('Dumbbell Hammer Curls', 'Biceps', 'DUMBBELL', 9.75, '/Imgs/Dumbbell Hammer Curls.gif'),
-    ('Dumbbell Lateral Raises', 'Shoulders', 'DUMBBELL', 5.5, '/Imgs/lateral-to-front-raise-combo.gif'),
+    ('Dumbbell Lateral Raises', 'Shoulders', 'DUMBBELL', 5.5, '/Imgs/Dumbbell Lateral Raises.gif'),
     ('Dumbbell Reverse Flyes', 'Shoulders', 'DUMBBELL', 5.5, '/Imgs/Dumbbell Reverse Flyes.gif'),
-    ('Dumbbell Romanian Deadlift', 'Hamstrings', 'DUMBBELL', 0, ''),
+    ('Dumbbell Romanian Deadlift', 'Hamstrings', 'DUMBBELL', 0, '/Imgs/Dumbbell Romanian Deadlift.gif'),
     ('Dumbbell Skullcrushers', 'Triceps', 'DUMBBELL', 9.75, '/Imgs/Dumbbell Skullcrushers.gif'),
     ('Dumbbell Step-Ups', 'Quadriceps', 'DUMBBELL', 9.75, '/Imgs/Dumbbell Step-Ups.gif'),
     ('Dumbbell Straight-Arm Pullover', 'Chest', 'DUMBBELL', 12.5, '/Imgs/Dumbbell Straight-Arm Pullover.gif'),
-    ('Dumbbell Triceps Kickbacks', 'Triceps', 'DUMBBELL', 0, ''),
-    ('Dumbbell Walking Lunges', 'Quadriceps', 'DUMBBELL', 0, ''),
-    ('Elevated Bench Plank Holds', 'Abs', 'BODYWEIGHT', 0, ''),
+    ('Dumbbell Triceps Kickbacks', 'Triceps', 'DUMBBELL', 0, '/Imgs/Dumbbell Triceps Kickbacks.gif'),
+    ('Dumbbell Walking Lunges', 'Quadriceps', 'DUMBBELL', 0, '/Imgs/Dumbbell Walking Lunges.gif'),
+    ('Elevated Bench Plank Holds', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Elevated Bench Plank Holds.gif'),
     ('Flat Dumbbell Bench Press', 'Chest', 'DUMBBELL', 9.75, '/Imgs/Flat Dumbbell Bench Press.gif'),
-    ('Goblet Squat', 'Quadriceps', 'KETTLEBELL', 0, ''),
-    ('Hanging/Bench Leg Raises', 'Abs', 'BODYWEIGHT', 0, ''),
-    ('Incline Barbell Bench Press', 'Chest', 'BARBELL', 0, ''),
-    ('Incline Dumbbell Bicep Curls', 'Biceps', 'DUMBBELL', 0, ''),
-    ('Incline Dumbbell Flyes', 'Chest', 'DUMBBELL', 0, ''),
-    ('Incline Dumbbell Press', 'Chest', 'DUMBBELL', 0, ''),
-    ('Incline Dumbbell Row', 'Back', 'DUMBBELL', 0, ''),
-    ('Kettlebell Bicep Curls', 'Biceps', 'KETTLEBELL', 0, ''),
-    ('Kettlebell Deadlifts', 'Back', 'KETTLEBELL', 0, ''),
-    ('Kettlebell Gorilla Rows', 'Back', 'KETTLEBELL', 0, ''),
-    ('Kettlebell Halo', 'Shoulders', 'KETTLEBELL', 0, ''),
-    ('Kettlebell Swings', 'Hamstrings', 'KETTLEBELL', 0, ''),
-    ('Kettlebell Windmill', 'Abs', 'KETTLEBELL', 0, ''),
+    ('Goblet Squat', 'Quadriceps', 'KETTLEBELL', 0, '/Imgs/Goblet Squat.gif'),
+    ('Hanging/Bench Leg Raises', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Hanging/Bench Leg Raises.gif'),
+    ('Incline Barbell Bench Press', 'Chest', 'BARBELL', 0, '/Imgs/Incline Barbell Bench Press.gif'),
+    ('Incline Dumbbell Bicep Curls', 'Biceps', 'DUMBBELL', 0, '/Imgs/Incline Dumbbell Bicep Curls.gif'),
+    ('Incline Dumbbell Flyes', 'Chest', 'DUMBBELL', 0, '/Imgs/Incline Dumbbell Flyes.gif'),
+    ('Incline Dumbbell Press', 'Chest', 'DUMBBELL', 0, '/Imgs/Incline Dumbbell Press.gif'),
+    ('Incline Dumbbell Row', 'Back', 'DUMBBELL', 0, '/Imgs/Incline Dumbbell Row.gif'),
+    ('Kettlebell Bicep Curls', 'Biceps', 'KETTLEBELL', 0, '/Imgs/Kettlebell Bicep Curls.gif'),
+    ('Kettlebell Deadlifts', 'Back', 'KETTLEBELL', 0, '/Imgs/Kettlebell Deadlifts.gif'),
+    ('Kettlebell Gorilla Rows', 'Back', 'KETTLEBELL', 0, '/Imgs/Kettlebell Gorilla Rows.gif'),
+    ('Kettlebell Halo', 'Shoulders', 'KETTLEBELL', 0, '/Imgs/Kettlebell Halo.gif'),
+    ('Kettlebell Swings', 'Hamstrings', 'KETTLEBELL', 0, '/Imgs/Kettlebell Swings.gif'),
+    ('Kettlebell Windmill', 'Abs', 'KETTLEBELL', 0, '/Imgs/Kettlebell Windmill.gif'),
     ('Lying Bench Reverse Crunches', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Lying Bench Reverse Crunches.gif'),
     ('Lying Triceps Skullcrushers', 'Triceps', 'DUMBBELL', 12.5, '/Imgs/Lying Triceps Skullcrushers.gif'),
-    ('Overhead Barbell Press (OHP)', 'Shoulders', 'BARBELL', 0, ''),
+    ('Overhead Barbell Press (OHP)', 'Shoulders', 'BARBELL', 0, '/Imgs/Overhead Barbell Press (OHP).gif'),
     ('Overhead Dumbbell Extension', 'Triceps', 'DUMBBELL', 12, '/Imgs/Overhead Dumbbell Extension.gif'),
-    ('Plank', 'Abs', 'BODYWEIGHT', 0, ''),
-    ('Push-Ups', 'Chest', 'BODYWEIGHT', 0, ''),
-    ('Russian Twists', 'Abs', 'BODYWEIGHT', 0, ''),
-    ('Seated Calf Raises', 'Calves', 'MACHINE', 0, ''),
+    ('Plank', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Plank.gif'),
+    ('Push-Ups', 'Chest', 'BODYWEIGHT', 0, '/Imgs/Push-Ups.gif'),
+    ('Russian Twists', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Russian Twists.gif'),
+    ('Seated Calf Raises', 'Calves', 'MACHINE', 0, '/Imgs/Seated Calf Raises.gif'),
     ('Seated Dumbbell Calf Raises', 'Calves', 'DUMBBELL', 0, '/Imgs/Seated Dumbbell Calf Raises.gif'),
     ('Seated Dumbbell Bicep Curls', 'Biceps', 'DUMBBELL', 9, '/Imgs/Seated Dumbbell Bicep Curls.gif'),
     ('Seated Dumbbell Shoulder Press', 'Shoulders', 'DUMBBELL', 9, '/Imgs/Seated Dumbbell Shoulder Press.gif'),
     ('Single-Arm Dumbbell Row', 'Back', 'DUMBBELL', 11.5, '/Imgs/Single-Arm Dumbbell Row.gif'),
-    ('Single-Arm Kettlebell Row', 'Back', 'KETTLEBELL', 0, ''),
-    ('Single-Arm Overhead Dumbbell Extension', 'Triceps', 'DUMBBELL', 0, ''),
-    ('Single-Leg Romanian Deadlift', 'Hamstrings', 'DUMBBELL', 0, ''),
+    ('Single-Arm Kettlebell Row', 'Back', 'KETTLEBELL', 0, '/Imgs/Single-Arm Kettlebell Row.gif'),
+    ('Single-Arm Overhead Dumbbell Extension', 'Triceps', 'DUMBBELL', 0, '/Imgs/Single-Arm Overhead Dumbbell Extension.gif'),
+    ('Single-Leg Romanian Deadlift', 'Hamstrings', 'DUMBBELL', 0, '/Imgs/Single-Leg Romanian Deadlift.gif'),
     ('Standing Barbell Bicep Curls', 'Biceps', 'BARBELL', 18, '/Imgs/Standing Barbell Bicep Curls.gif'),
     ('Standing Barbell Overhead Press', 'Shoulders', 'BARBELL', 18, '/Imgs/Standing Barbell Overhead Press.gif'),
-    ('Tate Press', 'Triceps', 'DUMBBELL', 0, ''),
+    ('Tate Press', 'Triceps', 'DUMBBELL', 0, '/Imgs/Tate Press.gif'),
     ('Weighted Flat Bench Crunches', 'Abs', 'BODYWEIGHT', 0, '/Imgs/Weighted Flat Bench Crunches.gif')
 ;
-
-
 
 INSERT INTO workouts (name, duration, description, notes, owner_id) VALUES
     ('Insta 1', 37, 'Biceps', '', (SELECT id FROM users WHERE username = 'shai')),
@@ -188,7 +186,9 @@ INSERT INTO workout_set_exercises ( workout_set_id, exercise_order, exercise_nam
     ((SELECT ws.id FROM workout_sets ws JOIN workouts w ON ws.workout_id = w.id WHERE w.name = 'Back & Abs (P3 Focus)' AND ws.set_order = 3),
      1, 'Lying Bench Reverse Crunches', 12),
     ((SELECT ws.id FROM workout_sets ws JOIN workouts w ON ws.workout_id = w.id WHERE w.name = 'Back & Abs (P3 Focus)' AND ws.set_order = 3),
-     2, 'Weighted Flat Bench Crunches', 12),
+     2, 'Weighted Flat Bench Crunches', 12)
+;
+INSERT INTO workout_set_exercises ( workout_set_id, exercise_order, exercise_name, reps) VALUES
     ((SELECT ws.id FROM workout_sets ws JOIN workouts w ON ws.workout_id = w.id WHERE w.name = 'Arms Hypertrophy & Chest Touch-up' AND ws.set_order = 1),
      1, 'Close-Grip Barbell Bench Press', 8),
     ((SELECT ws.id FROM workout_sets ws JOIN workouts w ON ws.workout_id = w.id WHERE w.name = 'Arms Hypertrophy & Chest Touch-up' AND ws.set_order = 1),
@@ -273,13 +273,35 @@ INSERT INTO workout_set_exercises ( workout_set_id, exercise_order, exercise_nam
      2, 'Heel-Elevated Goblet Squats', 12)
 ;
 
--- with open(r'c:\Users\Shai\Downloads\workouts.json') as f: data =json.load(f)
--- workouts, sets, exercises = [], [], []
--- for w in data.values():
---      workouts.append(f"""('{w["name"]}', {w["duration"]}, '{w.get("emphasis", "")}', '{w.get("notes", "")}')""")
---      for wso, ws in enumerate(w['sets']):
---          sets.append(f"""((SELECT id FROM workouts WHERE name = '{w["name"]}'), {wso + 1}, {ws["num"]}, {ws["rest"]})""")
---          for wseo, wse in enumerate(ws['exercises']):
---              exercises.append(f"""((SELECT ws.id FROM workout_sets ws JOIN workouts w ON ws.workout_id = w.id WHERE w.name = '{w["name"]}' AND ws.set_order = {wso + 1}),
---              {wseo + 1}, '{wse["name"]}', {wse["reps"]})""")
--- print(',\n'.join(workouts), ',\n'.join(sets), ',\n'.join(exercises))
+INSERT INTO activity_events (user_id, event_type, event_date, exercise_name, prev_weight, new_weight) VALUES
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-10-29', 'Close-Grip Barbell Bench Press', 13, 18),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-01', 'Seated Dumbbell Bicep Curls', 9, 9.75),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-01', 'Barbell Flat Bench Press', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-02', 'Standing Barbell Overhead Press', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-02', 'Seated Dumbbell Shoulder Press', 9, 9.75),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-02', 'Lying Triceps Skullcrushers', 12.5, 9.75),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-05', 'Close-Grip Barbell Bench Press', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-05', 'Standing Barbell Bicep Curls', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-09', 'Wrist Barbell Row', 19, 19.25),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-09', 'Single-Arm Dumbbell Row', 11.5, 10.75),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-14', 'Dumbbell Straight-Arm Pullover', 12.5, 15),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-14', 'Bent-Over Barbell Row', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-16', 'Single-Arm Dumbbell Kickback', 5, 5.5),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-17', 'Bulgarian Split Squats', 5, 6.5),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-17', 'Barbell Back Squat', 10, 15.5),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-17', 'Barbell Romanian Deadlift (RDL)', 18, 19),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-17', 'Dumbbell Forward Walking Lunge', 5, 6.5),
+    ((SELECT id from users WHERE username = 'shai'), 'weight', '2026-11-17', 'Heel-Elevated Goblet Squats', 6, 6.5)
+;
+
+INSERT INTO activity_events (user_id, event_type, event_date, workout_name) VALUES
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-02', 'Shoulders & Triceps (P2 Focus)'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-03', 'Back & Abs (P3 Focus)'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-05', 'Arms Hypertrophy & Chest Touch-up'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-08', 'Instagram day 1'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-09', 'Instagram day 2'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-11', 'Instagram day 3'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-12', 'Instagram day 5'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-14', 'Dan & Nadav'),
+    ((SELECT id from users WHERE username = 'shai'), 'workout', '2026-11-16', 'Instagram day 1')
+;

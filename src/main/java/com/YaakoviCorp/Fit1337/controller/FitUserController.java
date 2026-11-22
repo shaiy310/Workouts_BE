@@ -7,6 +7,8 @@ import com.YaakoviCorp.Fit1337.model.UserProfileResponse;
 import com.YaakoviCorp.Fit1337.security.model.AuthenticatedUser;
 import com.YaakoviCorp.Fit1337.service.FitUserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/public/user")
 public class FitUserController {
+    private static final Logger log = LoggerFactory.getLogger(FitUserController.class);
+
     private final FitUserService fitUserService;
 
     FitUserController(FitUserService fitUserService) {

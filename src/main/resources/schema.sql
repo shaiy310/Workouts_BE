@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS exercises;
 DROP TABLE IF EXISTS user_exercise_weights;
 DROP TABLE IF EXISTS activity_events;
-DROP TABLE IF EXISTS workouts;
-DROP TABLE IF EXISTS workout_sets;
 DROP TABLE IF EXISTS workout_set_exercises;
+DROP TABLE IF EXISTS workout_sets;
+DROP TABLE IF EXISTS workouts;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE user_exercise_weights (
 );
 
 CREATE TABLE activity_events (
-    id UUID PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id),
     event_type VARCHAR(20) NOT NULL CHECK (event_type IN ('weight', 'workout')),
     event_date DATE NOT NULL DEFAULT CURRENT_DATE,

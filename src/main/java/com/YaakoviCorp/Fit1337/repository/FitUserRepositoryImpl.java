@@ -19,9 +19,8 @@ public class FitUserRepositoryImpl implements FitUserRepository {
 
     @Override
     public FitUser createUser(FitUser fitUser) {
-        String sql = String.format("INSERT INTO %s (id, username, password, active, roles, permissions) VALUES (?, ?, ?, ?, ?, ?)", USERS_TABLE_NAME);
+        String sql = String.format("INSERT INTO %s (username, password, active, roles, permissions) VALUES (?, ?, ?, ?, ?)", USERS_TABLE_NAME);
         jdbcTemplate.update(sql,
-                fitUser.getId(),
                 fitUser.getUsername(),
                 fitUser.getPassword(),
                 fitUser.getActive(),
