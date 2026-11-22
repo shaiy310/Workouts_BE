@@ -30,7 +30,7 @@ spring:
 
   sql:
     init:
-      mode: never
+      mode: ${SQL_INIT_MODE:never}
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
   jpa:
@@ -43,6 +43,5 @@ redis:
   ttl: 72000
 
 jwt:
-#  base64.b64encode(b'this is a very long secret')
-  secret: UkVQTEFDRV9XSVRIX1lPVVJfMzJfQllURV9CQVNFNjRfRU5DT0RFRF9TRUNSRVRfS0VZ
+  secret: ${JWT_SECRET}
   expiration-ms: 36000000
